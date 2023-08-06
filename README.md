@@ -52,3 +52,7 @@ Eventhough we have two lines of explicit export this will be still one export. I
 ### Module system
 
 so when we use Node Modules and we export the file let say routes to `app.js` in `app.js` we can use whatever we exported from `routes.js` but we cannot edit or do write in `routes.js` from `app.js` Because the file is cashed by Node
+
+## Npm packages
+
+`nodemon` - nodemon is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
