@@ -1,19 +1,10 @@
-// This here is raw logic of node. With Express.js we don't need to do this
-// Should be easier. Express.js is a framework that makes it easier to work with node.js
-
-const http = require("http");
 const fs = require("fs");
 
-// You can have named function or annonymous function (arrow function)
-function requestListener(req, res) {}
-// We pass the requestListener function to the createServer function as reference
-// We don't execute it ()
-// It will be executed for every incoming request
-// Because crateServer is returning a server we need to store it in variable
-const server = http.createServer((req, res) => {
-  const url = req.url;
-  const method = req.method;
-  if (url === "/") {
+const requestHandler = (req, res) => {
+    const url = req.url;
+    const method = req.method;
+
+if (url === "/") {
     res.write("<html>");
     res.write("<head><title>My first page</title></head>");
     res.write(
@@ -61,7 +52,10 @@ const server = http.createServer((req, res) => {
   // Once you end the response you can't write to it anymore
   res.end();
   // If you write after end you will get an error
-});
 
-// Listen start a process where node.js will keep listening for incoming requests
-server.listen(3000);
+}
+
+module.exports = {
+    handler: requestHandler,
+    someText: "hard coded for now"
+}
