@@ -17,6 +17,8 @@ const shopRoutes = require("./routes/shop");
 
 // Tt will parse the body of the request and call next() after it is done.
 app.use(bodyParser.urlencoded({extended: false}));
+// this is a middleware function that will serve static files.  
+app.use(express.static(path.join(__dirname, "public")));
 
 // This is valid middleware function. Keep in mind the order of the middleware functions is important.
 // FIltering routes /admin is a filter. so all rountes starting with /admin will go to adminRoutes
