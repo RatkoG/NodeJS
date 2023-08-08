@@ -56,3 +56,33 @@ so when we use Node Modules and we export the file let say routes to `app.js` in
 ## Npm packages
 
 `nodemon` - nodemon is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
+
+# Express.js
+
+**Middleware**
+Middleware function.
+app.use will be executed for every incoming request.
+next artument which is a function is allowing the request to travel to the next middleware.
+
+```
+app.use("/product",(req, res, next) => {
+    // console.log("In the middleware!");
+    res.send("<h1>Product page!</h1>");
+   // next(); // Allows the request to continue to the next middleware in line.
+})
+// app.use((req, res, next) => {
+     console.log("In another middleware!");
+     res.send("<h1>Hello from Express!</h1>"); // Sends a response. 
+ })
+```
+
+**app.use vs app.get**
+`app.use` this works for all requests
+`app.get` works only for GET requests. We can achieve same thing with `app.use` but we have to filter the method
+We also have `app.post`, `app.patch`, `app.delete`
+
+# Public
+
+In public folder we put things that needs to be accessable by the user. One example would be the `css` files.
+
+For this we need feature for serving files staticly
