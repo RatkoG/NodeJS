@@ -86,3 +86,10 @@ We also have `app.post`, `app.patch`, `app.delete`
 In public folder we put things that needs to be accessable by the user. One example would be the `css` files.
 
 For this we need feature for serving files staticly
+
+
+# Sharing data
+
+One gotcha that we have in `3615fd8` commit is that this kind of sharing is available across the all users.
+
+So the console.log() will be seen across all users and across all browsers.** This is something to keep in mind.****
