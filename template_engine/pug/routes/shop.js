@@ -6,11 +6,8 @@ const adminData = require("./admin")
 const router = express.Router();
 
 router.get("/",(req, res, next) => {
-    console.log("shop.js",adminData.products)
-    // console.log("In the middleware!");
-    // Loading the html file.
-    // __dirname is a global variable that holds the absolute path to the project folder.
-    res.sendFile(path.join(rootDir, "views", "shop.html"));
+    const products = adminData.products;
+    res.render("shop", {prods: products, docTitle: "Shop"});
    // next(); // Allows the request to continue to the next middleware in line.
 })
 
