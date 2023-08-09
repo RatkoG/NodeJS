@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 
-const adminRoutes = require("./routes/admin");
+const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 // Middleware function.
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // This is valid middleware function. Keep in mind the order of the middleware functions is important.
 // FIltering routes /admin is a filter. so all rountes starting with /admin will go to adminRoutes
-app.use('/admin',adminRoutes);
+app.use('/admin',adminData.routes);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
