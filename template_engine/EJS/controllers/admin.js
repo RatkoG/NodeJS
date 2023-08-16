@@ -45,7 +45,7 @@ const updatedTitle = req.body.title
 const updatedPrice = req.body.price
 const updatedImageUrl = req.body.imageUrl
 const updatedDescription = req.body.description
-const updatedProduct = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDescription)
+const updatedProduct = new Product(prodId, updatedTitle, updatedImageUrl, updatedPrice, updatedDescription)
 
 updatedProduct.save()
 res.redirect('/admin/products')
