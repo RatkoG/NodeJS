@@ -1,30 +1,34 @@
-const db = require('../util/database')
-const crypto = require('crypto')
-const Cart = require('./cart')
+// Initilize Sequelize
+// Gives me back a class that I can use to create a new model 
+const Sequelize = require('sequilize');
 
-module.exports = class Product {
-  constructor(id, title, imageUrl, price, description) {
-    this.id = id;
-    this.title = title;
-    this.imageUrl = imageUrl;
-    this.price = price;
-    this.description = description;
-  }
+const sequilize = require('../util/database');
 
-  save() {
-    // This with the question martk and the array is security against SQL injection
-    return db.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', 
-    [ this.title, this.price, this.imageUrl, this.description] )
-  }
+// Create a new model
+// Define the model
+const Product = sequilize.define('product', {
+    // Define the columns
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    // Define the columns
+    title: Sequelize.STRING,
+    price: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+    },
+    imageUrl: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    description: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
 
-  static deleteById(id) {
-  }
-
-  static fetchAll() {
-    return db.execute('SELECT * FROM products')
-  }
-
-  static findById(id) {
-    return db.execute('SELECT * FROM products WHERE products.id = ?', [id])
-  }
-};
+// exporting modal
+module.exports = Product;
