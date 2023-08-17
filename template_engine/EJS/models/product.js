@@ -1,6 +1,6 @@
 // Initilize Sequelize
 // Gives me back a class that I can use to create a new model 
-const Sequelize = require('sequelize');
+const {Sequelize} = require("sequelize");
 
 const sequilize = require('../util/database');
 
