@@ -12,7 +12,9 @@ module.exports = class Product {
   }
 
   save() {
-
+    // This with the question martk and the array is security against SQL injection
+    return db.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', 
+    [ this.title, this.price, this.imageUrl, this.description] )
   }
 
   static deleteById(id) {
@@ -23,6 +25,6 @@ module.exports = class Product {
   }
 
   static findById(id) {
-  
+    return db.execute('SELECT * FROM products WHERE products.id = ?', [id])
   }
 };
