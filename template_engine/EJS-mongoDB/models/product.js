@@ -1,34 +1,42 @@
-// Initilize Sequelize
-// Gives me back a class that I can use to create a new model 
-const {Sequelize} = require("sequelize");
+const getDb = require('../util/database').getDb;
 
-const sequilize = require('../util/database');
-
-// Create a new model
-// Define the model
-const Product = sequilize.define('product', {
-    // Define the columns
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    // Define the columns
-    title: Sequelize.STRING,
-    price: {
-        type: Sequelize.DOUBLE,
-        allowNull: false
-    },
-    imageUrl: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: false
+class Product {
+    constructor(title, price, description, imageUrl) {
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl; 
     }
-});
+
+    save() {
+        // saving data to database
+        const db = getDb();
+        // this is the product
+       return db.collection('products')
+        .insertOne(this)
+        .then((result) => {
+            console.log(result)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    static fetchAll() {
+        const db = getDb();
+        // find() returns a cursor
+        return db.collection('products')
+        // This return a cursour
+        .find()
+        // If you have many many documents you will need pagination
+        .toArray()
+        .then(products => {
+            console.log(products)
+            return products;
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+}
 
 // exporting modal
 module.exports = Product;
