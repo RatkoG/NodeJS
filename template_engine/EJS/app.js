@@ -53,7 +53,7 @@ Product.belongsToMany(Cart, {through: CartItem})
 // Don't use this force on production
 // This is for overwriting the tables
 // {force: true}
-sequelize.sync({force: true}).then(result => {
+sequelize.sync().then(result => {
     // console.log(result); 
     User.findByPk(1)
 })
@@ -63,7 +63,11 @@ sequelize.sync({force: true}).then(result => {
     }
     return user
 })
-.then(() => {
+.then((user) => {
+   return user.createCart()
+    
+})
+.then(cart => {
     app.listen(3000);
 })
 .catch(err => {
