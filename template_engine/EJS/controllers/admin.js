@@ -13,15 +13,17 @@ exports.getAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl
     const price = req.body.price
     const description = req.body.description 
-
-   Product.create({
-    title: title,
-    imageUrl: imageUrl,
-    price: price,
-    description: description
-   }).then(
+    // This is coming from sequelize
+    // This is a magic method
+    // chechk the user model
+    req.user.createProduct({
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
+      description: description,
+     }).then(
       result => {
-        // console.log(result)
+        console.log(result)
         console.log('Created Product')
         res.redirect('/admin/products')
       }

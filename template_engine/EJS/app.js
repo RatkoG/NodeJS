@@ -19,6 +19,16 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    User.findByPk(1)
+    .then(user => {
+        req.user = user
+        // Continue the request
+        next()
+    })
+    .catch(err => console.log(err))
+})
+
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 
@@ -32,9 +42,20 @@ User.hasMany(Product)
 // Sync syncs your modal to the database by creating the appropriate tables
 // Don't use this force on production
 // This is for overwriting the tables
-sequelize.sync({force: true}).then(result => {
+// {force: true}
+sequelize.sync().then(result => {
     // console.log(result); 
+    User.findByPk(1)
+})
+.then(user => {
+    if (!user){
+        return User.create({name: 'Max', email: 'max@gmail.com'})
+    }
+    return user
+})
+.then(() => {
     app.listen(3000);
-}).catch(err => {
+})
+.catch(err => {
     console.log(err);
 });
