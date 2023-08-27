@@ -93,3 +93,6 @@ For this we need feature for serving files staticly
 One gotcha that we have in `3615fd8` commit is that this kind of sharing is available across the all users.
 
 So the console.log() will be seen across all users and across all browsers.** This is something to keep in mind.****
+
+## Mongoose
+Deleted the database utility file becasue mongoose does connection management for us.
