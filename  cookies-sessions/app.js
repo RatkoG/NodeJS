@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user'); 
@@ -18,6 +19,10 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+//  We configure the session middleware here. The secret will be used for signing the hash which secretly
+//  stores the id of the session in the cookie.
+// This will be the long string
+app.use(session({secret: "my secret string", resave: false, saveUninitialized: false}))
 
 // app.use((req, res, next) => {
 //   User.findById('5bab316ce0a7c75f783cb8a8')
