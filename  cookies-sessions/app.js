@@ -15,7 +15,6 @@ const app = express();
 const store =  new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions',
-  
 })
 
 app.set('view engine', 'ejs');
@@ -31,16 +30,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 //  stores the id of the session in the cookie.
 // This will be the long string
 // store will store it in database
-app.use(session({secret: "my secret string", resave: false, saveUninitialized: false, store: store}))
+app.use(
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store: store
+  })
+);
 
-// app.use((req, res, next) => {
-//   User.findById('5bab316ce0a7c75f783cb8a8')
-//     .then(user => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
+
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -50,21 +60,22 @@ app.use(errorController.get404);
 
 mongoose
   .connect(
-    MONGODB_URI,{useNewUrlParser: true}
+    MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(result => {
-    // User.findOne().then(user => {
-    //   if (!user) {
-    //     const user = new User({
-    //       name: 'Max',
-    //       email: 'max@test.com',
-    //       cart: {
-    //         items: []
-    //       }
-    //     });
-    //     user.save();
-    //   }
-    // });
+    console.log(result)
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: 'Max',
+          email: 'max@test.com',
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
     app.listen(3000);
   })
   .catch(err => {
