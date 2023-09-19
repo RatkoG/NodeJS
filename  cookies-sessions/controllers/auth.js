@@ -29,7 +29,34 @@ exports.postLogin = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  const email = req.body.email
+  const password = req.body.password
+  const confirmPassword = req.body.confirmPassword
+  // Check if user with email exist?
+  // With MongoDB we can add index on email field and give it unique property. This is one of the options to check if the email already exists in the database.
+  // Alternative is to find the user
+  User.findOne({email: email})
+    .then(userDoc => {
+      if(userDoc){
+        return res.redirect('/signup')
+      }
+      const user = new User({
+        email: email,
+        password: password,
+        cart: {items: []}
+      })
+      return user.save()
+    })
+    .then(result => {
+      res.redirect('/login')
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+  
+};
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
