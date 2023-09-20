@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore  = require('connect-mongodb-session')(session);
 const csrf = require("csurf");
+const flash = require("connect-flash");
 
 const errorController = require("./controllers/error");
 const User = require("./models/user");
@@ -44,6 +45,8 @@ app.use(
 );
 // Its important to use csrf after session
 app.use(csrfProtection);
+// flash must be used after session
+app.use(flash());
 
 app.use((req, res, next) => {
   console.log(req.csrfToken());
