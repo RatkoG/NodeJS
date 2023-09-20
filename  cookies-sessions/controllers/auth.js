@@ -17,35 +17,57 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
-exports.postLogin = (req, res, next) => {
-  const { email, password } = req.body;
+exports.postLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.redirect("/login");
+    }
 
-  User.findOne({ email: email })
-    .then((user) => {
-      if (!user) {
-        return res.redirect("/login");
-      }
-      // Checking if the password matches in the database
-      bcrypt
-        .compare(password, user.password)
-        .then((doMatch) => {
-          if (doMatch) {
-            req.session.isLoggedIn = true;
-            req.session.user = user;
-            return req.session.save((err) => {
-              console.log(err);
-              res.redirect("/");
-            });
-          }
-          res.redirect("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-          res.redirect("/login");
-        });
-    })
-    .catch((err) => console.log(err));
+    const doMatch = await bcrypt.compare(password, user.password);
+    if (doMatch) {
+      req.session.isLoggedIn = true;
+      req.session.user = user;
+      await req.session.save();
+      return res.redirect("/");
+    } else {
+      return res.redirect("/login");
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+// exports.postLogin = (req, res, next) => {
+//   const { email, password } = req.body;
+
+//   User.findOne({ email: email })
+//     .then((user) => {
+//       if (!user) {
+//         return res.redirect("/login");
+//       }
+//       // Checking if the password matches in the database
+//       bcrypt
+//         .compare(password, user.password)
+//         .then((doMatch) => {
+//           if (doMatch) {
+//             req.session.isLoggedIn = true;
+//             req.session.user = user;
+//             return req.session.save((err) => {
+//               console.log(err);
+//               res.redirect("/");
+//             });
+//           }
+//           res.redirect("/login");
+//         })
+//         .catch((err) => {
+//           console.log(err);
+//           res.redirect("/login");
+//         });
+//     })
+//     .catch((err) => console.log(err));
+// };
 
 exports.postSignup = async (req, res, next) => {
   try {
