@@ -58,6 +58,14 @@ app.use((req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+app.use((req, res, next) => {
+  // Special locals variable provided by express
+  // This will be passed to all views rendered by express
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});  
+
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
