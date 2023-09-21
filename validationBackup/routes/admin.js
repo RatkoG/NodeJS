@@ -29,17 +29,11 @@ router.post(
 router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
 router.post(
-  '/edit-product',
+  "/edit-product",
   [
-    body('title')
-      .isString()
-      .isLength({ min: 3 })
-      .trim(),
-    body('imageUrl').isURL(),
-    body('price').isFloat(),
-    body('description')
-      .isLength({ min: 5, max: 400 })
-      .trim()
+    body("title").isString().isLength({ min: 3 }).trim(),
+    body("price").isFloat(),
+    body("description").isLength({ min: 5, max: 400 }).trim(),
   ],
   isAuth,
   adminController.postEditProduct
