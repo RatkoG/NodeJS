@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
+const { validationResult } = require("express-validator");
+
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
   if (message.length > 0) {
@@ -26,6 +28,8 @@ exports.getSignup = (req, res, next) => {
     path: "/signup",
     pageTitle: "Signup",
     errorMessage: message,
+    oldInput: { email: "", password: "", confirmPassword: "" },
+    validationErrors: [],
   });
 };
 
@@ -86,14 +90,16 @@ exports.postLogin = async (req, res, next) => {
 exports.postSignup = async (req, res, next) => {
   try {
     const { email, password, confirmPassword } = req.body;
-    // Check if user with email exist?
-    // With MongoDB we can add index on email field and give it unique property. This is one of the options to check if the email already exists in the database.
-    // Alternative is to find the user
-    const userDoc = await User.findOne({ email });
+    const errors = validationResult(req);
 
-    if (userDoc) {
-      req.flash("error", "Email already exists.");
-      return res.redirect("/signup");
+    if (!errors.isEmpty()) {
+      return res.status(422).render("auth/signup", {
+        path: "/signup",
+        pageTitle: "Signup",
+        errorMessage: errors.array()[0].msg,
+        oldInput: { email, password, confirmPassword },
+        validationErrors: errors.array(),
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
