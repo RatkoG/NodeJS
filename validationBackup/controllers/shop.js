@@ -2,8 +2,9 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 const fs = require("fs");
 const path = require("path");
-
 const PDFDocument = require("pdfkit");
+
+const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
   Product.find()
@@ -34,7 +35,12 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+  const page = req.query.page;
+
   Product.find()
+    // This is mongoDB method to skip the first n elements and limit the number of elements returned
+    .skip((page - 1) * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE)
     .then((products) => {
       res.render("shop/index", {
         prods: products,
