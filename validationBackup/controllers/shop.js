@@ -36,16 +36,30 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
   const page = req.query.page;
-
+  let totalItems;
+  // This is mongoDB method to count the number of elements
   Product.find()
-    // This is mongoDB method to skip the first n elements and limit the number of elements returned
-    .skip((page - 1) * ITEMS_PER_PAGE)
-    .limit(ITEMS_PER_PAGE)
+    .count()
+    .then((numProducts) => {
+      totalItems = numProducts;
+      return (
+        Product.find()
+          // This is mongoDB method to skip the first n elements and limit the number of elements returned
+          .skip((page - 1) * ITEMS_PER_PAGE)
+          .limit(ITEMS_PER_PAGE)
+      );
+    })
     .then((products) => {
       res.render("shop/index", {
         prods: products,
         pageTitle: "Shop",
         path: "/",
+        totalProducts: totalItems,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
       });
     })
     .catch((err) => {
