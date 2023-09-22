@@ -46,7 +46,6 @@ exports.postAddProduct = (req, res, next) => {
       hasError: true,
       product: {
         title: title,
-        imageUrl: imageUrl,
         price: price,
         description: description,
       },
@@ -212,6 +211,4 @@ exports.postDeleteProduct = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     });
-
-
 };
