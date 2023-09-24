@@ -1,0 +1,8 @@
+{
+    "env": {
+        "MONGO_USER": "ratkogjurichanin",
+        "MONGO_PASSWORD": "nodeJS",
+        "MONGO_DEFAULT_DATABASE": "shop",
+        "STRIPE_KEY": "iwon'thaveproductionkey"
+    }
+}
