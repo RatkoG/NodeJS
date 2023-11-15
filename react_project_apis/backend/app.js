@@ -61,9 +61,10 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb+srv://maximilian:9u4biljMQc4jjqbe@cluster0-ntrwp.mongodb.net/messages?retryWrites=true'
+    "mongodb+srv://ratkogjurichanin:nodeJS@cluster0.eulz2l9.mongodb.net/messages",
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
-  .then(result => {
+  .then((result) => {
     app.listen(8080);
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
